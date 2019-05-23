@@ -2,19 +2,30 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"httpGo"
 	"net/http"
 )
 
-func main() {
-	http.HandleFunc("/submit", func(response http.ResponseWriter, request *http.Request) {
+type user struct {
+	Name string
+	Age int
+	Dick string
+}
 
-		request.ParseForm()
-		fmt.Println(request.PostForm)
-		response.Write([]byte("request successfully"))
-		log.Println("request Posted")
+func main() {
+	http.HandleFunc("/upload", func(response http.ResponseWriter, request *http.Request) {
+		var myUser *user
+
+		myUser = new(user)
+		myUser.Age = 10
+		myUser.Name = "大幅"
+		myUser.Dick = "大鸡巴"
+		fmt.Println(*myUser)
+		fmt.Println(myUser)
+		fmt.Println(&myUser)
+		httpGo.ResponseJSON(response, myUser)
+
 	})
-	log.Println("Server started up ...")
-	log.Fatal(http.ListenAndServe("localhost:8080", nil))
+	httpGo.StartServer("localhost:8080")
 
 }

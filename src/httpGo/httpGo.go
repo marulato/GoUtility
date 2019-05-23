@@ -1,18 +1,15 @@
-package ihttp
+package httpGo
 
 import (
+	"encoding/json"
 	"log"
+	"mime/multipart"
 	"net/http"
-	"os"
+	"strconv"
 )
 
 func StartServer(attr string) {
-	err := http.ListenAndServe(attr, nil)
-	if err == nil {
-		log.Println("Go Server Started up at " + attr)
-	} else {
-		log.Fatal(err)
-	}
+	http.ListenAndServe(attr, nil)
 }
 
 func GetFormValue(request *http.Request, key string) string {
@@ -30,14 +27,22 @@ func GetData(request *http.Request) []byte {
 	return data
 }
 
-func GetUploadedFile(request *http.Request, name string) os.File {
+func GetUploadedFile(request *http.Request, name string) (multipart.File, int64) {
 	request.ParseMultipartForm(1024 * 1024 * 10)
 	fileheader := request.MultipartForm.File[name][0]
+	length := fileheader.Size
 	file, err := fileheader.Open()
 	if err == nil {
-		return file
+		log.Println("Uploaded file name: " + fileheader.Filename + ", Size: " + strconv.FormatInt(length, 10))
+		return file, length
 	} else {
 		log.Fatal("Error Opening File")
-		return nil
+		return nil, 0
 	}
+}
+
+func ResponseJSON(response http.ResponseWriter, jsonObject interface{}) {
+	response.Header().Set("Content-Type", "application/json")
+	jsonObj, _ := json.Marshal(jsonObject)
+	response.Write(jsonObj)
 }
