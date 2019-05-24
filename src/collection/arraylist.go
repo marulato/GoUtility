@@ -1,4 +1,4 @@
-package arrayList
+package collection
 
 type ArrayList struct {
 	size     int

@@ -1,7 +1,7 @@
 package main
 
 import (
-	arrayList "arraylist"
+	arrayList "collection"
 	"fmt"
 )
 

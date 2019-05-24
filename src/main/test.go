@@ -1,31 +1,14 @@
 package main
 
-import (
-	"fmt"
-	"httpGo"
-	"net/http"
-)
-
-type user struct {
-	Name string
-	Age int
-	Dick string
-}
+import "document"
 
 func main() {
-	http.HandleFunc("/upload", func(response http.ResponseWriter, request *http.Request) {
-		var myUser *user
+	xlsx := document.NewExcel("D:\\test.xlsx", "Sheet1")
+	for i := 0; i < 10; i++ {
 
-		myUser = new(user)
-		myUser.Age = 10
-		myUser.Name = "大幅"
-		myUser.Dick = "大鸡巴"
-		fmt.Println(*myUser)
-		fmt.Println(myUser)
-		fmt.Println(&myUser)
-		httpGo.ResponseJSON(response, myUser)
-
-	})
-	httpGo.StartServer("localhost:8080")
+		var value = []string  {"大福", "宝宝", "柴犬", "小黄人", "大福", "宝宝", "柴犬", "小黄人", "大福", "宝宝", "柴犬", "小黄人"}
+		xlsx.SetRowValue(i,0, &value)
+	}
+	xlsx.Save()
 
 }

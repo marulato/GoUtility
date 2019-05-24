@@ -46,3 +46,8 @@ func ResponseJSON(response http.ResponseWriter, jsonObject interface{}) {
 	jsonObj, _ := json.Marshal(jsonObject)
 	response.Write(jsonObj)
 }
+
+func Redirect(response http.ResponseWriter, url string) {
+	response.Header().Set("Location", url)
+	response.WriteHeader(302)
+}
